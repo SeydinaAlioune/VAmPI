@@ -4,31 +4,33 @@ pipeline {
     stages {
         stage('1. Récupération du Code') {
             steps {
-                // Cette commande télécharge automatiquement le code depuis ton GitHub
                 checkout scm
-                echo '🚀 ALERTE : Déclenchement automatique réussi !!!'
+                echo '✅ Code récupéré avec succès depuis GitHub !'
             }
         }
         
-        stage('2. Construction (Préparation)') {
+        stage('2. Construction (Image Docker)') {
             steps {
-                echo '⚙️ C\'est ici que nous construirons l\'image Docker de l\'application plus tard.'
+                echo '⚙️ Lancement de la construction de l\'image Docker...'
+                // La commande "sh" permet à Jenkins d'exécuter des commandes Linux
+                sh 'docker build -t vampi-sec:latest .'
+                echo '✅ Image Docker construite avec succès !'
             }
         }
         
         stage('3. Analyse de Sécurité (Placeholders)') {
             steps {
-                echo '🛡️ C\'est ici que nous ajouterons les scans Trivy, SonarQube et ZAP.'
+                echo '🛡️ C\'est ici que nous ajouterons les scans Trivy et ZAP.'
             }
         }
     }
     
     post {
         success {
-            echo '🎉 Le pipeline de base fonctionne ! Bientôt, Jenkins t\'enverra un mail ici.'
+            echo '🎉 Le build a réussi ! L\'image est prête.'
         }
         failure {
-            echo '❌ Aïe, le pipeline a échoué. Il faut vérifier les logs.'
+            echo '❌ Échec. Il faut vérifier les logs de la console Jenkins.'
         }
     }
 }
