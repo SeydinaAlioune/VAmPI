@@ -5,32 +5,34 @@ pipeline {
         stage('1. Récupération du Code') {
             steps {
                 checkout scm
-                echo '✅ Code récupéré avec succès depuis GitHub !'
+                echo '✅ Code récupéré avec succès.'
             }
         }
         
         stage('2. Construction (Image Docker)') {
             steps {
-                echo '⚙️ Lancement de la construction de l\'image Docker...'
-                // La commande "sh" permet à Jenkins d'exécuter des commandes Linux
                 sh 'docker build -t vampi-sec:latest .'
-                echo '✅ ✅ Image Docker construite avec succès !'
+                echo '✅ Image Docker construite.'
             }
         }
         
-        stage('3. Analyse de Sécurité (Placeholders)') {
+        stage('3. Scan de Sécurité (Trivy)') {
             steps {
-                echo '🛡️ C\'est ici que nous ajouterons les scans Trivy et ZAP.'
+                echo '🛡️ Lancement du scan avec Trivy...'
+                // On utilise le conteneur Trivy pour scanner l'image locale
+                // --exit-code 1 : Arrête le pipeline si une faille CRITIQUE ou HIGH est trouvée
+                sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --exit-code 1 --severity HIGH,CRITICAL vampi-sec:latest'
+                echo '✅ Scan terminé avec succès.'
             }
         }
     }
     
     post {
         success {
-            echo '🎉 Le build a réussi ! L\'image est prête.'
+            echo '🎉 Pipeline réussi et image sécurisée !'
         }
         failure {
-            echo '❌ Échec. Il faut vérifier les logs de la console Jenkins.'
+            echo '❌ Le build a échoué (Soit erreur Docker, soit Trivy a trouvé des failles !)'
         }
     }
 }
