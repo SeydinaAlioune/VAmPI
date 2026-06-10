@@ -14,7 +14,7 @@ pipeline {
                 echo '⚙️ Lancement de la construction de l\'image Docker...'
                 // La commande "sh" permet à Jenkins d'exécuter des commandes Linux
                 sh 'docker build -t vampi-sec:latest .'
-                echo '✅ Image Docker construite avec succès !'
+                echo '✅ ✅ Image Docker construite avec succès !'
             }
         }
         
