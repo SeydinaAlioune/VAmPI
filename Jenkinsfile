@@ -6,7 +6,7 @@ pipeline {
             steps {
                 // Cette commande télécharge automatiquement le code depuis ton GitHub
                 checkout scm
-                echo '✅ Code récupéré avec succès depuis GitHub !'
+                echo '🚀 ALERTE : Déclenchement automatique réussi !!!'
             }
         }
         
